@@ -1,0 +1,8 @@
+.center{width: 1210px; height: 828px; margin: 0 auto;}
+.top2 > div{ width:237px; height: 340px; float: left; margin-right: 243px;}
+.top2 > div >p{text-align: center; font-family: "microsoft yahei"; font-size: 20px; margin-top: 24px; margin-bottom: 24px;}
+.top2 > div >span{font-family: "microsoft yahei"; font-size: 14px;line-height: 23px;}
+.bottom2 > div{width:237px; height: 340px;  float: left;margin-right: 243px;}
+.bottom2 > div >p{text-align: center; font-family: "microsoft yahei"; font-size: 20px; margin-top: 24px; margin-bottom: 24px;}
+.bottom2 > div >span{font-family: "microsoft yahei"; font-size: 14px;line-height: 23px;}
+

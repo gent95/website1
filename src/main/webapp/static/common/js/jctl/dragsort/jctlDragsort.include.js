@@ -1,0 +1,1 @@
+JSLoader.loadJavaScript(($.isVar("jctlJsIncludeBasePath")?eval("jctlJsIncludeBasePath"):"")+'/jctl/dragsort/jctlDragsort.js');

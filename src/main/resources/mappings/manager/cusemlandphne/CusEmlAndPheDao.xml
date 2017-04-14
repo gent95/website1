@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jctl.cloud.manager.cusemlandphne.CusEmlAndPheDao">
+    
+	<sql id="cusEmlAndPheColumns">
+		a.id AS "id",
+		a.nav_list_id AS "navList.id",
+		a.company_name AS "companyName",
+		a.email AS "email",
+		a.phone AS "phone",
+		a.add_user_id AS "addUserId",
+		a.add_time AS "addTime",
+		a.update_user_id AS "updateUserId",
+		a.update_time AS "updateTime",
+		a.company_img AS "picPath",
+		a.web_addr AS "webAddr",
+		c.name AS "navList.name"
+	</sql>
+	
+	<sql id="cusEmlAndPheJoins">
+			INNER JOIN jc_nav_list c ON c.id = a.nav_list_id
+	</sql>
+    
+	<select id="get" resultType="CusEmlAndPhe">
+		SELECT 
+			<include refid="cusEmlAndPheColumns"/>
+		FROM jc_customer_emailandphone a
+		<include refid="cusEmlAndPheJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CusEmlAndPhe">
+		SELECT 
+			<include refid="cusEmlAndPheColumns"/>
+		FROM jc_customer_emailandphone a
+		<include refid="cusEmlAndPheJoins"/>
+		<where>
+			
+			<if test="companyName != null and companyName != ''">
+				AND a.company_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{companyName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{companyName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{companyName},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CusEmlAndPhe">
+		SELECT 
+			<include refid="cusEmlAndPheColumns"/>
+		FROM jc_customer_emailandphone a
+		<include refid="cusEmlAndPheJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO jc_customer_emailandphone(
+			nav_list_id,
+			company_name,
+			web_addr,
+			email,
+			phone,
+			add_user_id,
+			add_time,
+			update_user_id,
+			update_time,
+			company_img
+		) VALUES (
+			#{navList.id},
+			#{companyName},
+			#{webAddr},
+			#{email},
+			#{phone},
+			#{addUserId},
+			#{addTime},
+			#{updateUserId},
+			#{updateTime},
+			#{picPath}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE jc_customer_emailandphone SET 	
+			nav_list_id = #{navList.id},
+			company_name = #{companyName},
+			email = #{email},
+			web_addr=#{webAddr},
+			phone = #{phone},
+			add_user_id = #{addUserId},
+			add_time = #{addTime},
+			update_user_id = #{updateUserId},
+			update_time = #{updateTime},
+			company_img = #{picPath}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM jc_customer_emailandphone
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

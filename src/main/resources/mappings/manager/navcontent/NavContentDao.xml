@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jctl.cloud.manager.navcontent.NavContentDao">
+    
+	<sql id="navContentColumns">
+		a.id AS "id",
+		a.nav_id AS "navId",
+		a.nav_name AS "navName",
+		a.type AS "type",
+		a.title AS "title",
+		a.contenr AS "contenr",
+		a.add_time AS "addTime",
+		a.add_user_id AS "addUserId",
+		a.update_time AS "updateTime",
+		a.update_user_id AS "updateUserId"
+	</sql>
+	
+	<sql id="navContentJoins">
+	</sql>
+    
+	<select id="get" resultType="NavContent">
+		SELECT 
+			<include refid="navContentColumns"/>
+		FROM jc_nav_content a
+		<include refid="navContentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="NavContent">
+		SELECT 
+			<include refid="navContentColumns"/>
+		FROM jc_nav_content a
+		<include refid="navContentJoins"/>
+		<where>
+			
+			<if test="navName != null and navName != ''">
+				AND a.nav_name = #{navName}
+			</if>
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="NavContent">
+		SELECT 
+			<include refid="navContentColumns"/>
+		FROM jc_nav_content a
+		<include refid="navContentJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO jc_nav_content(
+			nav_id,
+			nav_name,
+			type,
+			title,
+			contenr,
+			add_time,
+			add_user_id,
+			update_time,
+			update_user_id
+		) VALUES (
+			#{navId},
+			#{navName},
+			#{type},
+			#{title},
+			#{contenr},
+			#{addTime},
+			#{addUserId},
+			#{updateTime},
+			#{updateUserId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE jc_nav_content SET 	
+			nav_id = #{navId},
+			nav_name = #{navName},
+			type = #{type},
+			title = #{title},
+			contenr = #{contenr},
+			add_time = #{addTime},
+			add_user_id = #{addUserId},
+			update_time = #{updateTime},
+			update_user_id = #{updateUserId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM jc_nav_content
+		WHERE id = #{id}
+	</update>
+
+	<select id="getByNavId" parameterType="java.lang.String" resultType="NavContent">
+		SELECT * FROM jc_nav_content WHERE nav_id = #{navId} limit 0,1
+	</select>
+	
+</mapper>

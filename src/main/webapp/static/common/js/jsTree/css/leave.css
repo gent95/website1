@@ -1,0 +1,45 @@
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    vertical-align: middle;
+}
+.daterangepicker .ranges {
+    width: 300px;
+}
+.daterangepicker .ranges .input-mini {
+    width: 130px;
+}
+.datepicker_btn{
+    height: 30px;
+    line-height: 30px;
+    padding: 5px 5px;
+    margin-right: 4px;
+    color: #FFF;
+    background: #357EBD;
+    text-decoration: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.datepicker_btn:hover{
+    height: 30px;
+    line-height: 30px;
+    padding: 5px 5px;
+    margin-right: 4px;
+    color: #FFF;
+    background: #357EBD;
+    text-decoration: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.table>tbody+tbody {
+    border-top: 1px solid #ddd;
+}
+.sort{
+    cursor:pointer;
+    padding-right: 20px;
+    background: url("../../images/xiah.png") no-repeat right;
+}
+.ASC{
+    background: url("../../images/xia.png") no-repeat right;
+}
+.DESC{
+    background: url("../../images/shang.png") no-repeat right;
+}

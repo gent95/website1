@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jctl.cloud.manager.newslist.NewsListDao">
+
+    <sql id="newsListColumns">
+		a.id AS "id",
+		a.nav_id AS "navId",
+		a.title AS "title",
+		a.order_num AS "orderNum",
+		a.show_flag AS "showFlag",
+		a.add_user_id AS "addUserId",
+		a.add_time AS "addTime",
+		a.update_user_id AS "updateUserId",
+		a.update_time AS "updateTime",
+		a.pic_path AS "picPath",
+		a.type  AS "type",
+		a.recommend AS "recommend"
+	</sql>
+
+    <sql id="newsListJoins">
+
+    </sql>
+
+    <select id="get" resultType="NewsList">
+        SELECT
+        <include refid="newsListColumns"/>
+        FROM jc_news_list a
+        <include refid="newsListJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="NewsList">
+        SELECT
+        <include refid="newsListColumns"/>
+        FROM jc_news_list a
+        <where>
+
+            <if test="title != null and title != ''">
+                AND a.title LIKE
+                <if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+                <if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+            </if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="NewsList">
+        SELECT
+        <include refid="newsListColumns"/>
+        FROM jc_news_list a
+
+        <where>
+
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO jc_news_list(
+        nav_id,
+        title,
+        recommend,
+        order_num,
+        show_flag,
+        add_user_id,
+        add_time,
+        update_user_id,
+        update_time,
+        pic_path,
+        type
+        ) VALUES (
+        #{navId},
+        #{title},
+        #{recommend},
+        #{orderNum},
+        #{showFlag},
+        #{addUserId},
+        #{addTime},
+        #{updateUserId},
+        #{updateTime},
+        #{picPath},
+        #{type}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE jc_news_list SET
+        nav_id = #{navId},
+        title = #{title},
+        type=#{type},
+        order_num = #{orderNum},
+        show_flag = #{showFlag},
+        add_user_id = #{addUserId},
+        add_time = #{addTime},
+        update_user_id = #{updateUserId},
+        update_time = #{updateTime},
+        pic_path = #{picPath},
+        recommend = #{recommend}
+        WHERE id = #{id}
+    </update>
+
+    <update id="delete">
+        DELETE FROM jc_news_list
+        WHERE id = #{id}
+    </update>
+    <select id="getLatelyList" resultType="NewsList">
+        SELECT * FROM jc_news_list ORDER BY  add_time DESC limit 0,3
+    </select>
+
+    <select id="getHotNews" resultType="NewsList">
+        SELECT * FROM jc_news_list WHERE recommend = 1
+    </select>
+
+    <select id="getByNavId" resultType="NewsList" parameterType="NewsList">
+        select
+        <include refid="newsListColumns"/>
+        from jc_news_list a
+        <include refid="newsListJoins"/>
+        <if test="navId != null">
+            where nav_id= #{navId}
+        </if>
+        order by id ASC limit #{startNum},15
+    </select>
+
+    <!--<select id="getById" resultType="NewsList" parameterType="NewsList">-->
+    <!--select-->
+    <!--<include refid="newsListColumns"/>-->
+    <!--from jc_news_list a-->
+    <!--JOIN jc_nav_list b-->
+    <!--ON-->
+    <!--a.nav_id = b.id-->
+
+    <!--where a.id= #{id}-->
+    <!--</select>-->
+
+
+    <select id="getNewsDetail" resultType="NewsList" parameterType="NewsList">
+        select
+        a.id AS "id",
+        a.nav_id AS "navId",
+        a.title AS "title",
+        a.order_num AS "orderNum",
+        a.show_flag AS "showFlag",
+        a.add_user_id AS "addUserId",
+        a.add_time AS "addTime",
+        a.update_user_id AS "updateUserId",
+        a.update_time AS "updateTime",
+        a.pic_path AS "picPath",
+        a.type  AS "type",
+        a.recommend AS "recommend",
+        b.context,
+        b.context_title AS "contextTitle",
+        b.pic_path AS "banner",
+        nav.name AS "navName",
+        pNav.name AS "parentNavName"
+        from jc_news_list a
+        LEFT JOIN
+        jc_news_context b
+        ON
+        a.id = b.new_list_id
+        LEFT JOIN
+        jc_nav_list nav
+        ON
+        a.nav_id = nav.id
+        JOIN
+        jc_nav_list pNav
+        ON
+        nav.parent_id = pNav.id
+        WHERE
+        a.id=${id}
+    </select>
+
+    <update id="updateRecommend">
+		UPDATE jc_news_list SET recommend = 0
+	</update>
+
+</mapper>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jctl.cloud.manager.resourcedownload.ResourceDownloadDao">
+    
+	<sql id="resourceDownloadColumns">
+		a.id AS "id",
+		a.nav_list_id AS "navList.id",
+		a.name AS "name",
+		a.url AS "url",
+		a.account AS "account",
+		a.browsecount AS "browsecount",
+		a.downloadcount AS "downloadcount",
+		a.size AS "size",
+		a.add_user_id AS "addUserId",
+		a.add_time AS "addTime",
+		a.update_user_id AS "updateUserId",
+		a.update_time AS "updateTime",
+		a.context AS "context",
+		a.img_url AS "picPath",
+		n.name AS "navList.name"
+	</sql>
+	
+	<sql id="resourceDownloadJoins">
+		LEFT JOIN jc_nav_list n ON n.id = a.nav_list_id
+	</sql>
+    
+	<select id="get" resultType="ResourceDownload">
+		SELECT 
+			<include refid="resourceDownloadColumns"/>
+		FROM jc_resource_download a
+		<include refid="resourceDownloadJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ResourceDownload">
+		SELECT 
+			<include refid="resourceDownloadColumns"/>
+		FROM jc_resource_download a
+		<include refid="resourceDownloadJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ResourceDownload">
+		SELECT 
+			<include refid="resourceDownloadColumns"/>
+		FROM jc_resource_download a
+		<include refid="resourceDownloadJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO jc_resource_download(
+			nav_list_id,
+			name,
+			url,
+			account,
+			browsecount,
+			downloadcount,
+			size,
+			add_user_id,
+			add_time,
+			update_user_id,
+			update_time,
+			context,
+			img_url
+		) VALUES (
+			#{navList.id},
+			#{name},
+			#{url},
+			#{account},
+			#{browsecount},
+			#{downloadcount},
+			#{size},
+			#{addUserId},
+			#{addTime},
+			#{updateUserId},
+			#{updateTime},
+			#{context},
+			#{picPath}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE jc_resource_download SET 	
+			nav_list_id = #{navList.id},
+			name = #{name},
+			url = #{url},
+			account = #{account},
+			browsecount = #{browsecount},
+			downloadcount = #{downloadcount},
+			size = #{size},
+			add_user_id = #{addUserId},
+			add_time = #{addTime},
+			update_user_id = #{updateUserId},
+			update_time = #{updateTime},
+			context = #{context},
+			img_url = #{picPath}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM jc_resource_download
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

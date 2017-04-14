@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jctl.cloud.manager.problem.ProblemPostDao">
+    
+	<sql id="problemPostColumns">
+		a.id AS "id",
+		a.question AS "question",
+		a.details AS "details",
+		a.name AS "name",
+		a.phone AS "phone",
+		a.email AS "email",
+		a.add_user_id AS "addUserId",
+		a.add_time AS "addTime",
+		a.update_user_id AS "updateUserId",
+		a.update_time AS "updateTime"
+	</sql>
+	
+	<sql id="problemPostJoins">
+	</sql>
+    
+	<select id="get" resultType="ProblemPost">
+		SELECT 
+			<include refid="problemPostColumns"/>
+		FROM jc_problem_post a
+		<include refid="problemPostJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ProblemPost">
+		SELECT 
+			<include refid="problemPostColumns"/>
+		FROM jc_problem_post a
+		<include refid="problemPostJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ProblemPost">
+		SELECT 
+			<include refid="problemPostColumns"/>
+		FROM jc_problem_post a
+		<include refid="problemPostJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO jc_problem_post(
+			question,
+			details,
+			name,
+			phone,
+			email,
+			add_user_id,
+			add_time,
+			update_user_id,
+			update_time
+		) VALUES (
+			#{question},
+			#{details},
+			#{name},
+			#{phone},
+			#{email},
+			#{addUserId},
+			#{addTime},
+			#{updateUserId},
+			#{updateTime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE jc_problem_post SET 	
+			question = #{question},
+			details = #{details},
+			name = #{name},
+			phone = #{phone},
+			email = #{email},
+			add_user_id = #{addUserId},
+			add_time = #{addTime},
+			update_user_id = #{updateUserId},
+			update_time = #{updateTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM jc_problem_post
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

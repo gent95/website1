@@ -1,0 +1,23 @@
+
+.divier-line{height:99px; margin-top: 36px;}
+.top_s{font-family:MicrosoftYaHei ; font-size:24px; text-align: center; margin:0px; padding: 0px;}
+.bottom_s{font-family:MicrosoftYaHei ; font-size:18px; text-align: center; margin-top:0px; margin-bottom: 30px; margin-left: 0px; margin-right: 0px; padding: 0px;}
+.line{border-bottom: 1px solid #efefef; margin: 0px;}
+.greed_line{border-bottom: 6px solid #295a94; width: 39px; margin:auto; margin-top: -3px;}
+.context{height: 447px; width:  1200px ;  position: absolute; left: 10%;}
+.context_left{width: auto; height: 393px; margin-right: 11px; float: left;}
+.context_right{height: 393px;width:auto; float: left;}
+.context_right > div{margin-bottom: 14px;}
+.context_right > div > img{float: left; margin-top: 0px;}
+.content_text{width: 474px; height:122px; background-color:#fbfbfb; margin-left:160px; margin-top: 0px;}
+.styleText{margin-left: 14px;float: left;margin-top: 14px;font-family:MicrosoftYaHei ; font-size:16px; }
+.styleTime{padding-bottom: 18px; font-family:MicrosoftYaHei ; font-size:12px;  color:#949494 ; float: left; margin-bottom: 18px; padding: 0px; margin-top: 27px; margin-left: 14px; width: 350px;}
+.border_ss{width:54px; height: 22px; float: right; margin-right: 26px; margin-left: 0px; margin-top: 27px; margin-bottom: 0px; border: 1px solid #295a94; ; text-align: center;}
+.border_ss > a{text-decoration:none; color:  #295a94;}
+.border_ss > a:hover{text-decoration:none; color:  #f18a22;}
+.changeColor{text-decoration: none; color:  #f18a22;}
+.context_left >div > a{text-decoration: none;color: #ffffff;}
+.context_left >div > a:hover{text-decoration: none; color:  #f18a22;}
+.styleText_s{margin-left: 14px;float: left;margin-top: 14px;font-family:MicrosoftYaHei ; font-size:16px;color: #f18a22; }
+.border_Style{border: 1px solid #f18a22;}
+

@@ -1,0 +1,5 @@
+$(function () {
+    $.initJcTree("/tree/data");
+});
+
+

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jctl.cloud.manager.banner.BannerDao">
+
+    <sql id="bannerColumns">
+		a.id AS "id",
+		a.title AS "title",
+		a.nav_br_id AS "navBrId",
+		a.pic_path AS "picPath",
+		a.url AS "url",
+		a.order_num AS "orderNum",
+		a.show_flag AS "showFlag",
+		a.add_user_id AS "addUserId",
+		a.add_time AS "addTime",
+		a.updte_user_id AS "updteUserId",
+		a.update_time AS "updateTime"
+	</sql>
+
+    <sql id="bannerJoins">
+    </sql>
+
+    <select id="get" resultType="Banner">
+        SELECT
+        <include refid="bannerColumns"/>
+        FROM jc_banner a
+        <include refid="bannerJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="Banner">
+        SELECT
+        <include refid="bannerColumns"/>
+        FROM jc_banner a
+        <include refid="bannerJoins"/>
+        <where>
+
+            <if test="title != null and title != ''">
+                AND a.title LIKE
+                <if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+                <if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+            </if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="Banner">
+        SELECT
+        <include refid="bannerColumns"/>
+        FROM jc_banner a
+        <include refid="bannerJoins"/>
+        <where>
+
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
+		INSERT INTO jc_banner(
+			title,
+			nav_br_id,
+			pic_path,
+			url,
+			order_num,
+			show_flag,
+			add_user_id,
+			add_time,
+			updte_user_id,
+			update_time
+		) VALUES (
+			#{title},
+			#{navBrId},
+			#{picPath},
+			#{url},
+			#{orderNum},
+			#{showFlag},
+			#{addUserId},
+			#{addTime},
+			#{updteUserId},
+			#{updateTime}
+		)
+	</insert>
+
+    <update id="update">
+		UPDATE jc_banner SET 	
+			title = #{title},
+			nav_br_id = #{navBrId},
+			pic_path = #{picPath},
+			url = #{url},
+			order_num = #{orderNum},
+			show_flag = #{showFlag},
+			add_user_id = #{addUserId},
+			add_time = #{addTime},
+			updte_user_id = #{updteUserId},
+			update_time = #{updateTime}
+		WHERE id = #{id}
+	</update>
+
+    <update id="delete">
+		DELETE FROM jc_banner
+		WHERE id = #{id}
+	</update>
+    <update id="changeStatus" parameterType="com.jctl.cloud.manager.banner.Banner">
+		UPDATE jc_banner SET
+		show_flag = #{Banner.showFlag}
+		WHERE id = #{Banner.id}
+	</update>
+    <select id="getBannerList" resultType="Banner">
+        SELECT
+        <include refid="bannerColumns"/>
+        FROM jc_banner a
+        WHERE
+        show_flag = 1
+        ORDER BY
+        order_num
+        ASC
+    </select>
+
+
+</mapper>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jctl.cloud.manager.joinus.JoinUsDao">
+    
+	<sql id="joinUsColumns">
+		a.id AS "id",
+		a.position AS "position",
+		a.salary AS "salary",
+		a.suffer AS "suffer",
+		a.education AS "education",
+		a.nature AS "nature",
+		a.create_time AS "createTime",
+		a.postion_statement AS "postionStatement",
+		a.qualification AS "qualification"
+	</sql>
+	
+	<sql id="joinUsJoins">
+	</sql>
+    
+	<select id="get" resultType="JoinUs">
+		SELECT 
+			<include refid="joinUsColumns"/>
+		FROM jc_join_us a
+		<include refid="joinUsJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="JoinUs">
+		SELECT 
+			<include refid="joinUsColumns"/>
+		FROM jc_join_us a
+		<include refid="joinUsJoins"/>
+		<where>
+			
+			<if test="position != null and position != ''">
+				AND a.position LIKE 
+					<if test="dbName == 'oracle'">'%'||#{position}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{position}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{position},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="JoinUs">
+		SELECT 
+			<include refid="joinUsColumns"/>
+		FROM jc_join_us a
+		<include refid="joinUsJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO jc_join_us(
+			position,
+			salary,
+			suffer,
+			education,
+			nature,
+			postion_statement,
+			qualification,
+			create_time
+		) VALUES (
+			#{position},
+			#{salary},
+			#{suffer},
+			#{education},
+			#{nature},
+			#{postionStatement},
+			#{qualification},
+			#{createTime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE jc_join_us SET 	
+			position = #{position},
+			salary = #{salary},
+			suffer = #{suffer},
+			education = #{education},
+			nature = #{nature},
+  			postion_statement = #{postionStatement},
+			qualification = #{qualification}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM jc_join_us
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

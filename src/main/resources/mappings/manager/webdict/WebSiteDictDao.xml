@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jctl.cloud.manager.webdict.WebSiteDictDao">
+    
+	<sql id="webSiteDictColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.key_value AS "keyValue",
+		a.lock_value AS "lockValue",
+		a.order_num AS "orderNum",
+		a.status AS "status",
+		a.add_user_id AS "addUserId",
+		a.add_time AS "addTime",
+		a.update_user_id AS "updateUserId",
+		a.update_time AS "updateTime",
+		a.remark AS "remark"
+	</sql>
+	
+	<sql id="webSiteDictJoins">
+	</sql>
+    
+	<select id="get" resultType="WebSiteDict">
+		SELECT 
+			<include refid="webSiteDictColumns"/>
+		FROM jc_web_site_dict a
+		<include refid="webSiteDictJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WebSiteDict">
+		SELECT 
+			<include refid="webSiteDictColumns"/>
+		FROM jc_web_site_dict a
+		<include refid="webSiteDictJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WebSiteDict">
+		SELECT 
+			<include refid="webSiteDictColumns"/>
+		FROM jc_web_site_dict a
+		<include refid="webSiteDictJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO jc_web_site_dict(
+			name,
+			key_value,
+			lock_value,
+			order_num,
+			status,
+			add_user_id,
+			add_time,
+			update_user_id,
+			update_time,
+			remark
+		) VALUES (
+			#{name},
+			#{keyValue},
+			#{lockValue},
+			#{orderNum},
+			#{status},
+			#{addUserId},
+			#{addTime},
+			#{updateUserId},
+			#{updateTime},
+			#{remark}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE jc_web_site_dict SET 	
+			name = #{name},
+			key_value = #{keyValue},
+			lock_value = #{lockValue},
+			order_num = #{orderNum},
+			status = #{status},
+			add_user_id = #{addUserId},
+			add_time = #{addTime},
+			update_user_id = #{updateUserId},
+			update_time = #{updateTime},
+			remark = #{remark}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM jc_web_site_dict
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

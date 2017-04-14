@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jctl.cloud.manager.product.ProductDao">
+    
+	<sql id="productColumns">
+		a.id AS "id",
+		a.nav_id AS "navId",
+		a.nav_parent AS "navParent",
+		a.pic_path AS "picPath",
+		a.title AS "title",
+		a.context AS "context",
+		a.path AS "path",
+		a.is_show AS "isShow",
+		a.add_user_id AS "addUserId",
+		a.add_time AS "addTime",
+		a.update_user_id AS "updateUserId",
+		a.update_time AS "updateTime"
+	</sql>
+	
+	<sql id="productJoins">
+	</sql>
+
+	<select id="findByNavId" parameterType="com.jctl.cloud.manager.product.Product" resultType="Product">
+		SELECT
+		<include refid="productColumns"/>
+		FROM jc_product a
+		WHERE a.nav_id = #{id}
+		AND a.is_show = #{isShow}
+
+	</select>
+    
+	<select id="get" resultType="Product">
+		SELECT 
+			<include refid="productColumns"/>
+		FROM jc_product a
+		<include refid="productJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Product">
+		SELECT 
+			<include refid="productColumns"/>
+		FROM jc_product a
+		<include refid="productJoins"/>
+		<where>
+			
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Product">
+		SELECT 
+			<include refid="productColumns"/>
+		FROM jc_product a
+		<include refid="productJoins"/>
+		<where>
+
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO jc_product(
+			nav_id,
+			nav_parent,
+			pic_path,
+			title,
+			context,
+			path,
+			is_show,
+			add_user_id,
+			add_time,
+			update_user_id,
+			update_time
+		) VALUES (
+			#{navId},
+			#{navParent},
+			#{picPath},
+			#{title},
+			#{context},
+			#{path},
+			#{isShow},
+			#{addUserId},
+			#{addTime},
+			#{updateUserId},
+			#{updateTime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE jc_product SET 	
+			nav_id = #{navId},
+			nav_parent = #{navParent},
+			pic_path = #{picPath},
+			title = #{title},
+			context = #{context},
+			path = #{path},
+			is_show = #{isShow},
+			add_user_id = #{addUserId},
+			add_time = #{addTime},
+			update_user_id = #{updateUserId},
+			update_time = #{updateTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM jc_product
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

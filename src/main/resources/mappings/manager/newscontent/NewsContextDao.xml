@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jctl.cloud.manager.newscontent.NewsContextDao">
+
+	<sql id="newsContextColumns">
+		a.id AS "id",
+		a.new_list_id AS "newListId",
+		a.context AS "context",
+		a.add_user_id AS "addUserId",
+		a.add_time AS "addTime",
+		a.update_user_id AS "updateUserId",
+		a.pic_path AS "picPath",
+		a.update_time AS "updateTime",
+		a.context_title AS "contextTitle"
+	</sql>
+
+	<sql id="newsContextJoins">
+	</sql>
+
+	<select id="get" resultType="NewsContext">
+		SELECT
+		<include refid="newsContextColumns"/>
+		FROM jc_news_context a
+		<include refid="newsContextJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="NewsContext">
+		SELECT
+		<include refid="newsContextColumns"/>
+		FROM jc_news_context a
+		<include refid="newsContextJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="NewsContext">
+		SELECT
+		<include refid="newsContextColumns"/>
+		FROM jc_news_context a
+		<include refid="newsContextJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO jc_news_context(
+		new_list_id,
+		context_title,
+		context,
+		add_user_id,
+		add_time,
+		update_user_id,
+		update_time,
+		pic_path
+		) VALUES (
+		#{newListId},
+		#{contextTitle},
+		#{context},
+		#{addUserId},
+		#{addTime},
+		#{updateUserId},
+		#{updateTime},
+		#{picPath}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE jc_news_context SET
+			new_list_id = #{newListId},
+			context_title=#{contextTitle},
+			context = #{context},
+			add_user_id = #{addUserId},
+			add_time = #{addTime},
+			update_user_id = #{updateUserId},
+			update_time = #{updateTime},
+			pic_path=#{picPath}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM jc_news_context
+		WHERE id = #{id}
+	</update>
+
+	<select id="getByNewsListId" parameterType="java.lang.Long" resultType="com.jctl.cloud.manager.newscontent.NewsContext">
+		SELECT
+		* FROM jc_news_context
+		WHERE
+		new_list_id =#{newListId}
+	</select>
+
+	<delete id="deleteByNewsId" parameterType="java.lang.Long">
+		DELETE FROM jc_news_context
+		WHERE new_list_id = #{newListId}
+	</delete>
+	<select id="getLatelyList" resultType="NewsContext">
+		SELECT * FROM jc_news_context ORDER BY  add_time DESC
+	</select>
+
+</mapper>

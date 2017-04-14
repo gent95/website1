@@ -1,0 +1,177 @@
+@charset "UTF-8";
+html {
+    font-size: 62.5%;
+    font-family: 'helvetica neue', tahoma, arial, 'hiragino sans gb', 'Simsun', sans-serif
+}
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, button, textarea, p, blockquote, th, td, hr {
+    margin: 0;
+    padding: 0
+}
+
+body {
+    line-height: 1.333;
+    font-size: 12px
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+    font-family: arial, 'hiragino sans gb', 'microsoft yahei', 'Simsun', sans-serif
+}
+
+li {
+    list-style: none
+}
+
+a:link, a:visited {
+    text-decoration: none
+}
+
+.head-v3 {
+    position: relative;
+    z-index: 100;
+    min-width: 1000px
+}
+
+.head-v3 .navigation-inner {
+    margin: 0 auto;
+    width: 1200px;
+    position: relative
+}
+
+.navigation-up {
+    height: 81px;
+    width: auto;
+    background: #ffffff;
+    border-bottom: 1px solid #F0F0F0;
+}
+
+.navigation-up .navigation-v3 {
+
+    float: left;
+    _margin-left: 10px
+}
+
+.navigation-up .navigation-v3 ul {
+    float: left
+}
+
+.navigation-up .navigation-v3 li {
+    float: left;
+    margin-right: 30px;
+    font: normal 16px/59px "microsoft yahei";
+    color: #fff
+}
+
+
+.navigation-up .navigation-v3 .nav-up-selected {
+    background: #ffffff
+}
+
+.navigation-up .navigation-v3 .nav-up-selected-inpage {
+    background: #ffffff
+}
+
+.navigation-up .navigation-v3 li h2 {
+    font-weight: normal;
+    padding: 0;
+    margin: 0
+}
+
+.navigation-up .navigation-v3 li h2 a {
+    font-family:MicrosoftYaHei ;
+    font-size:18px;
+    color: #343434;
+    text-decoration: none;
+    height:80px;
+    padding: 0 25px;
+    display: inline-block;
+}
+
+.navigation-up .navigation-v3 li h2 a:hover {
+
+    border-bottom: 2px solid #0068b7 ;
+}
+.navigation-down {
+    position: absolute;
+    top: 82px;
+    left: 0px;
+    width: 100%
+}
+
+.navigation-down .nav-down-menu {
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    background: #ffffff;
+    position: absolute;
+    top: 0px
+}
+
+.navigation-down .nav-down-menu .navigation-down-inner {
+    margin:0 auto;
+    width: 1200px;
+    text-align: center;
+    position: relative
+}
+.navigation-down .nav-down-menu .navigation-down-inner span{
+  margin-left: 200px;
+    margin-top: 40px;
+    margin-bottom: 30px;
+    text-align: center;
+    float: left;
+}
+
+/*.navigation-down .nav-down-menu .navigation-down-inner div {
+    text-align: center;
+}*/
+/*.navigation-down .nav-down-menu .navigation-down-inner span {
+    float: left;
+    text-align: center;
+}*/
+/*.navigation-down .nav-down-menu dl {
+    float: left;
+    margin: 18px 80px 18px 0
+}*/
+
+/*.navigation-down .menu-1 dl {
+    margin: 20px 80px 25px 0
+}*/
+
+.navigation-down .menu-1 .thr p {
+    margin: 0px;
+    margin-bottom: 15px;
+    font-size: 20px;
+    color:#f18a22;
+    text-align: center;
+    font-family:MicrosoftYaHei;
+}
+.navigation-down .menu-1 .alias {
+    font-size: 14px;
+    font-family:MicrosoftYaHei;
+}
+.navigation-down .menu-1 .thr p a {
+    margin: 0px;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #000000;
+    font-family:MicrosoftYaHei ;
+    font-size:17px;
+}
+
+.navigation-down .menu-1 p a:hover {
+    color:#000000;
+    text-decoration:underline;
+}
+.navigation-down .menu-1 p{
+    margin-bottom: 15px;
+    color:#000000;
+    font-size: 18px;
+    text-decoration:none;
+}
+.navigation-down .menu-2 dd a, .navigation-down .menu-3 dd a {
+    color: #fff;
+    font: normal 16px "microsoft yahei"
+}
+
+

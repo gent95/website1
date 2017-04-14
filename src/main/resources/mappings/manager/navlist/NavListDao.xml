@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jctl.cloud.manager.navlist.NavListDao">
+
+    <sql id="navListColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.url AS "url",
+		a.ordr_num AS "ordrNum",
+		a.parent_ids AS "parentIds",
+		a.parent_id AS "parent.id",
+		a.status AS "status",
+		a.add_user_id AS "addUserId",
+		a.add_time AS "addTime",
+		a.update_user_id AS "updateUserId",
+		a.update_time AS "updateTime",
+		a.type AS type,
+		a.alias AS alias,
+		a.pic_path AS picPath,
+		a.pic_img AS picImg
+	</sql>
+
+    <sql id="navListJoins">
+    </sql>
+
+    <select id="get" resultType="NavList">
+        SELECT
+        <include refid="navListColumns"/>
+        FROM jc_nav_list a
+        <include refid="navListJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="NavList">
+        SELECT
+        <include refid="navListColumns"/>
+        FROM jc_nav_list a
+        <include refid="navListJoins"/>
+        <where>
+            <if test="name != null and name != ''">
+                AND a.name LIKE
+                <if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+                <if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+            </if>
+            <if test="parentIds != null and parentIds != ''">
+
+                AND a.parent_ids LIKE
+                <if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+                <if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
+            </if>
+            <if test="parent != null and parent.id != null and parent.id != ''">
+                AND a.parent_id = #{parent.id}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="findAllList" resultType="NavList">
+        SELECT
+        <include refid="navListColumns"/>
+        FROM jc_nav_list a
+        <include refid="navListJoins"/>
+        <where>
+
+        </where>
+    </select>
+
+    <select id="findByParentIdsLike" resultType="NavList">
+        SELECT
+        a.id,
+        a.parent_id AS "parent.id",
+        a.parent_ids
+        FROM jc_nav_list a
+        <include refid="navListJoins"/>
+        <where>
+
+            AND a.parent_ids LIKE #{parentIds}
+        </where>
+    </select>
+
+    <insert id="insert">
+		INSERT INTO jc_nav_list(
+			name,
+			url,
+			ordr_num,
+			parent_ids,
+			parent_id,
+			status,
+			add_user_id,
+			add_time,
+			update_user_id,
+			update_time,
+			type,
+			alias,
+			pic_path,
+			pic_img
+		) VALUES (
+			#{name},
+			#{url},
+			#{ordrNum},
+			#{parentIds},
+			#{parent.id},
+			#{status},
+			#{addUserId},
+			#{addTime},
+			#{updateUserId},
+			#{updateTime},
+			#{type},
+			#{alias},
+			#{picPath},
+			#{picImg}
+
+		)
+	</insert>
+
+    <update id="update">
+		UPDATE jc_nav_list SET 	
+			name = #{name},
+			url = #{url},
+			ordr_num = #{ordrNum},
+			parent_ids = #{parentIds},
+			parent_id = #{parent.id},
+			status = #{status},
+			add_user_id = #{addUserId},
+			add_time = #{addTime},
+			update_user_id = #{updateUserId},
+			update_time = #{updateTime},
+			type = #{type},
+			alias = #{alias},
+			pic_path = #{picPath},
+			pic_img=#{picImg}
+		WHERE id = #{id}
+	</update>
+
+    <update id="updateParentIds">
+		UPDATE jc_nav_list SET 
+			parent_id = #{parent.id}, 
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+
+    <update id="delete">
+		DELETE FROM jc_nav_list
+		WHERE id = #{id} OR parent_id = #{id}
+	</update>
+
+    <select id="getNavList" resultType="NavList">
+        SELECT
+        <include refid="navListColumns"/>
+        FROM jc_nav_list a
+        WHERE status = 1
+        AND
+        parent_id = 0
+        ORDER BY ordr_num ASC
+    </select>
+
+    <select id="getAllList" resultType="NavList">
+        SELECT
+        <include refid="navListColumns"/>
+        FROM jc_nav_list a
+        WHERE status = 1
+        ORDER BY ordr_num ASC
+    </select>
+
+    <select id="getByParentId" resultType="NavList" parameterType="java.lang.String">
+        SELECT
+        <include refid="navListColumns"/>
+        FROM jc_nav_list a
+        WHERE
+        parent_id = #{id}
+        AND
+        status = 1
+    </select>
+
+
+</mapper>

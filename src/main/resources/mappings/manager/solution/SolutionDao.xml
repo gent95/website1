@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jctl.cloud.manager.solution.SolutionDao">
+    
+	<sql id="solutionColumns">
+		a.id AS "id",
+		a.title AS "title",
+		a.content AS "content",
+		a.pic_path AS "picPath",
+		a.nav_id AS "navList.id",
+		a.add_user_id AS "addUserId",
+		a.add_time AS "addTime",
+		a.update_user_id AS "updateUserId",
+		a.update_time AS "updateTime",
+		c.name AS "navList.name"
+	</sql>
+	
+	<sql id="solutionJoins">
+		LEFT JOIN jc_nav_list c ON c.id = a.nav_id
+	</sql>
+    
+	<select id="get" resultType="Solution">
+		SELECT 
+			<include refid="solutionColumns"/>
+		FROM jc_solution a
+		<include refid="solutionJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Solution">
+		SELECT 
+			<include refid="solutionColumns"/>
+		FROM jc_solution a
+		<include refid="solutionJoins"/>
+		<where>
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="navList != null and navList.id != '' and navList.id !=null">
+				AND a.nav_id=#{navList.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Solution">
+		SELECT 
+			<include refid="solutionColumns"/>
+		FROM jc_solution a
+		<include refid="solutionJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getListByNavId" resultType="Solution">
+		SELECT
+		<include refid="solutionColumns"/>
+		FROM jc_solution a
+		<include refid="solutionJoins"/>
+		WHERE a.nav_id = #{navList.id}
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getSolutionByNavId" resultType="Solution">
+			SELECT
+			<include refid="solutionColumns"/>
+			FROM jc_solution a
+			<include refid="solutionJoins"/>
+			WHERE a.nav_id = #{navList.id}
+			order by a.add_time desc
+			LIMIT 1
+		</select>
+
+	<insert id="insert">
+		INSERT INTO jc_solution(
+			title,
+			content,
+			pic_path,
+			nav_id,
+			add_time
+		) VALUES (
+			#{title},
+			#{content},
+			#{picPath},
+			#{navList.id},
+			#{addTime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE jc_solution SET 	
+			title = #{title},
+			content = #{content},
+			pic_path = #{picPath},
+			nav_id = #{navList.id},
+			update_time=#{updateTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM jc_solution
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

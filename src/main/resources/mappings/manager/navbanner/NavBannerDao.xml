@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jctl.cloud.manager.navbanner.NavBannerDao">
+    
+	<sql id="navBannerColumns">
+		a.id AS "id",
+		a.pic_path AS "picPath",
+		a.nav_id AS "navId"
+	</sql>
+	
+	<sql id="navBannerJoins">
+	</sql>
+    
+	<select id="get" resultType="NavBanner">
+		SELECT 
+			<include refid="navBannerColumns"/>
+		FROM jc_nav_banner a
+		<include refid="navBannerJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="NavBanner">
+		SELECT 
+			<include refid="navBannerColumns"/>
+		FROM jc_nav_banner a
+		<include refid="navBannerJoins"/>
+		<where>
+			
+			<if test="navId != null and navId != ''">
+				AND a.nav_id = #{navId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="NavBanner">
+		SELECT 
+			<include refid="navBannerColumns"/>
+		FROM jc_nav_banner a
+		<include refid="navBannerJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO jc_nav_banner(
+			pic_path,
+			nav_id
+		) VALUES (
+			#{picPath},
+			#{navId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE jc_nav_banner SET 	
+			pic_path = #{picPath},
+			nav_id = #{navId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM jc_nav_banner
+		WHERE id = #{id}
+	</update>
+
+	<select id="getByNavId"  resultType="NavBanner">
+		SELECT
+		<include refid="navBannerColumns"/>
+		FROM
+		jc_nav_banner a
+		WHERE
+		nav_id = #{navId}
+	</select>
+	
+</mapper>
